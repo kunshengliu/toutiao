@@ -34,8 +34,22 @@ public class HomeController {
 			vos.add(vo);
 		}
 		model.addAttribute("vos",vos);
-		//
-		//List<ViewObjct>	
 		return "home";
 	}
+
+	public List<ViewObject> getNews(int userId,int offset,int limit){
+		List<News> newsList = newsService.getLatestNews(userId, offset, limit);
+		
+		List<ViewObject> vos = new ArrayList<ViewObject>();
+		for(News news:newsList){
+			ViewObject vo = new ViewObject();
+			}
+		
+		
+		return null;
+	}
+	
+	
+	
+	
 }
