@@ -68,7 +68,7 @@ public class UserService {
 		user.setHeadUrl(head);
 		user.setPassword(ToutiaoUtils.MD5(password+user.getSalt()));
 		userDAO.addUser(user);
-		
+		System.out.println("abc");
 		//下面是登录
 		String ticket = addLoginTicket(userDAO.selectByName(username).getId());
 		
@@ -126,11 +126,14 @@ public class UserService {
 		ticket.setExpired(date);
 		ticket.setStatus(0);
 		ticket.setTicket(UUID.randomUUID().toString());
-		
+		System.out.println("bcd");
 		loginTicketDAO.addLoginTicket(ticket);
 		
 		return ticket.getTicket();
 		
+	}
+	public void logout(String ticket){
+		loginTicketDAO.updateLoginTicket(ticket, 1);
 	}
 	
 	
