@@ -9,8 +9,28 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 
 public class ToutiaoUtils {
+	  public static String TOUTIAO_DOMAIN="http:localhost:8080";
 	  private static final Logger logger = LoggerFactory.getLogger(ToutiaoUtils.class);
 
+	  private static String [] IMAGE_EXT=new String[]{"png","bmp","jpg","eng"};
+	  
+	  public static String IMAGE_DIR="D:/upload/";//文件上传路径
+	  
+	  /**
+	   * 判断一个文件的结尾是不是一个图片
+	   * @param ext
+	   * @return
+	   */
+        public static boolean isFileAllowed(String ext){
+        	for(int i=0;i<IMAGE_EXT.length;i++){
+        		if(IMAGE_EXT[i].equals(ext)){
+        			return true;
+        		}
+        	}
+        	return false;
+        }
+	  
+	  
 	    public static String getJSONString(int code) {
 	        JSONObject json = new JSONObject();
 	        json.put("code", code);
@@ -23,7 +43,12 @@ public class ToutiaoUtils {
 	        json.put("msg", msg);
 	        return json.toJSONString();
 	    }
-
+	    /**
+	     * 把一个map的几个转换成为json格式
+	     * @param code
+	     * @param map
+	     * @return
+	     */
 	    public static String getJSONString(int code, Map<String, Object> map) {
 	        JSONObject json = new JSONObject();
 	        json.put("code", code);
@@ -32,7 +57,11 @@ public class ToutiaoUtils {
 	        }
 	        return json.toJSONString();
 	    }
-
+	    /**
+	     * MD5加密
+	     * @param key
+	     * @return
+	     */
 	    public static String MD5(String key) {
 	        char hexDigits[] = {
 	                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'

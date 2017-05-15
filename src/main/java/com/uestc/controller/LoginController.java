@@ -4,7 +4,6 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +57,7 @@ public class LoginController {
 			@RequestParam(value="rember",defaultValue="0") int remberme,
 			HttpServletResponse response){		
 		try {
+			
 			Map<String,Object> map = userService.login(username, password);
 			if(map.containsKey("ticket")){
 				//把ticket加入cookie
