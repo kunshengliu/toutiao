@@ -17,7 +17,10 @@ import com.uestc.model.HostHolder;
 import com.uestc.model.LoginTicket;
 import com.uestc.model.User;
 /**
- * 用户登录的时候要进行的拦截
+ * 制作的拦截器
+ * 需要继承HandlerInterceptor接口
+ * 然后重写preHander//controller前面的拦截器
+ * post后置的拦截
  * @author liukunsheng
  *
  */
@@ -45,11 +48,13 @@ public class PassportInterceptor implements  HandlerInterceptor {
 				}
 			}
 		}
+		//假如有ticket那么可能是登录的。
 		if(ticket!=null){
 			LoginTicket loginTicket = loginTicketDAO.getLonginTicketByTicket(ticket);
 			if(loginTicket==null||loginTicket.getExpired().before(new Date())||loginTicket.getStatus()!=0){
 				return true;
 			}
+			//我现在知道你是谁拉的，现在我要明白你是谁了。
 			User user = userDAO.selectById(loginTicket.getUserId());
 			hostHolder.setUser(user);
 		}
@@ -62,8 +67,8 @@ public class PassportInterceptor implements  HandlerInterceptor {
 			ModelAndView modelAndView) throws Exception {
 		if(modelAndView!=null&&hostHolder.getUser()!=null){
 			modelAndView.addObject("user",hostHolder.getUser());
+			//modelAndView.
 		}
-		
 		
 		
 	}

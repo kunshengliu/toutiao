@@ -2,12 +2,16 @@ package com.uestc.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.uestc.model.News;
 import com.uestc.model.ViewObject;
@@ -23,7 +27,8 @@ public class HomeController {
 	private UserService userService;
 	
 	@RequestMapping(path={"/","/index"},method={RequestMethod.GET,RequestMethod.POST})
-	public String index(Model model){
+	public String index(Model model,
+			@RequestParam(value="pop",defaultValue="0") int pop){
 		List<News> newsList = newsService.getLatestNews(0, 0, 10);
 		
 		List<ViewObject> vos = new ArrayList<>();
@@ -34,6 +39,7 @@ public class HomeController {
 			vos.add(vo);
 		}
 		model.addAttribute("vos",vos);
+		model.addAttribute("pop", pop);
 		return "home";
 	}
 
@@ -43,10 +49,17 @@ public class HomeController {
 		List<ViewObject> vos = new ArrayList<ViewObject>();
 		for(News news:newsList){
 			ViewObject vo = new ViewObject();
-			}
-		
-		
-		return null;
+			vo.set("news",news);
+			vo.set("user",userService.getUser(news.getUserId()));
+			vos.add(vo);
+			}	
+		return vos;
+	}
+	
+	@RequestMapping("/user/{userId}")
+	public String userIndex(Model model,@PathVariable("userId") int userId){
+		model.addAttribute("vos", getNews(userId, 0, 10));
+		return "home";
 	}
 	
 	

@@ -69,11 +69,9 @@ public class UserService {
 		user.setPassword(ToutiaoUtils.MD5(password+user.getSalt()));
 		userDAO.addUser(user);
 		System.out.println("abc");
-		//下面是登录
+		//下面是登录，让注册后直接登录
 		String ticket = addLoginTicket(userDAO.selectByName(username).getId());
-		
 		map.put("ticket", ticket);
-		
 		return map;
 	}
 	
@@ -104,24 +102,21 @@ public class UserService {
 			 map.put("msgpwd", "密码不正确");
 			 return map;
 		}
-		
+		//登录的时候下发一个t票
 		String ticket =addLoginTicket(user.getId());
 		map.put("ticket",ticket);
-		
-		
-		
-		
 		return map;
 	}
 	/**
 	 * 登录时添加ticket
-	 * @param userId
+	 * @param userId，用户的id
 	 * @return
 	 */
 	private String addLoginTicket(int userId){
 		LoginTicket ticket = new LoginTicket();
 		ticket.setUserId(userId);
 		Date date = new Date();
+		//设置ticket的有效期，当前时间往后延迟
 		date.setTime(date.getTime()+1000*3600*24);
 		ticket.setExpired(date);
 		ticket.setStatus(0);

@@ -60,10 +60,11 @@ public class LoginController {
 		try {
 			Map<String,Object> map = userService.login(username, password);
 			if(map.containsKey("ticket")){
+				//把ticket加入cookie
 				Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
 				cookie.setPath("/");
 				if(remberme>0){
-					cookie.setMaxAge(3600*24);
+					cookie.setMaxAge(3600*24); //设置cookie的有效时间。
 				}
 				response.addCookie(cookie);				
 				return ToutiaoUtils.getJSONString(0,"登录成功");

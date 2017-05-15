@@ -58,6 +58,13 @@
 		<artifactId>fastjson</artifactId>
 		<version>1.2.32</version>
 </dependency>
+<!-- 类似于自动编译重启的   -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <version>1.5.3.RELEASE</version>
+</dependency>
+
 	</dependencies>
 
 	<build>
