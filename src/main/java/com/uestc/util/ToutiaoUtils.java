@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 
 public class ToutiaoUtils {
+	
+	
 	  public static String TOUTIAO_DOMAIN="http:localhost:8080";
 	  private static final Logger logger = LoggerFactory.getLogger(ToutiaoUtils.class);
 
