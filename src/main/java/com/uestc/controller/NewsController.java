@@ -45,7 +45,7 @@ public class NewsController {
 			return ToutiaoUtils.getJSONString(1, "上传失败");	
 		}
 	}
-	@RequestMapping()
+	@RequestMapping("/wozenme1zhidoa1")
 	@ResponseBody
 	public void getImage(@RequestParam("name")String imageName,
 			HttpServletResponse response){

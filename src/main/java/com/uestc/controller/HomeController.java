@@ -28,7 +28,8 @@ public class HomeController {
 	
 	@RequestMapping(path={"/","/index"},method={RequestMethod.GET,RequestMethod.POST})
 	public String index(Model model,
-			@RequestParam(value="pop",defaultValue="0") int pop){
+			@RequestParam(value="pop",required=false, defaultValue="0") int pop){
+		System.out.println("this is index");
 		List<News> newsList = newsService.getLatestNews(0, 0, 10);
 		
 		List<ViewObject> vos = new ArrayList<>();
