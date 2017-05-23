@@ -67,10 +67,7 @@ public class PassportInterceptor implements  HandlerInterceptor {
 			ModelAndView modelAndView) throws Exception {
 		if(modelAndView!=null&&hostHolder.getUser()!=null){
 			modelAndView.addObject("user",hostHolder.getUser());
-			//modelAndView.
-		}
-		
-		
+		}	
 	}
 
 	@Override
@@ -79,5 +76,4 @@ public class PassportInterceptor implements  HandlerInterceptor {
 			throws Exception {
 		hostHolder.clear();
 	}
-
 }
