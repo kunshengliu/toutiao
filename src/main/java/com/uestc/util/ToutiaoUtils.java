@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 public class ToutiaoUtils {
 	
 	
-	  public static String TOUTIAO_DOMAIN="http:localhost:8080";
+	  public static String TOUTIAO_DOMAIN="http://localhost:8080";
 	  private static final Logger logger = LoggerFactory.getLogger(ToutiaoUtils.class);
 
 	  private static String [] IMAGE_EXT=new String[]{"png","bmp","jpg","eng"};

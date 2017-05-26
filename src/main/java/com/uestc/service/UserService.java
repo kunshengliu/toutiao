@@ -93,7 +93,6 @@ public class UserService {
 		}
 		
 		User user = userDAO.selectByName(username);
-		
 		if(user==null){
 			map.put("msgname", "用户不存在");
 			return map;
@@ -103,6 +102,7 @@ public class UserService {
 			 return map;
 		}
 		//登录的时候下发一个t票
+		System.out.println("下发一个ticket");
 		String ticket =addLoginTicket(user.getId());
 		map.put("ticket",ticket);
 		return map;

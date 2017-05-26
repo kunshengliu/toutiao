@@ -17,6 +17,8 @@ public interface NewsDAO {
 	String INSERT_FIELDS="title,link,image,like_count,comment_count,created_date,user_id";
 	String SELECT_FIELDS="id,"+INSERT_FIELDS;
 	
+	@Select({"select",SELECT_FIELDS," from ",TABLE_NAME," where id=#{id}"})
+	News selectByNewsId(int id);
 	
 	
 	@Insert({"insert into",TABLE_NAME,"(",INSERT_FIELDS,
