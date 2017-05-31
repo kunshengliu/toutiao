@@ -2,7 +2,9 @@ package com.uestc.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,9 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uestc.model.Comment;
+import com.uestc.model.EntityType;
 import com.uestc.model.HostHolder;
 import com.uestc.model.News;
 import com.uestc.model.User;
+import com.uestc.model.ViewObject;
+import com.uestc.service.CommentService;
 import com.uestc.service.NewsService;
 import com.uestc.service.QiniuService;
 import com.uestc.service.UserService;
@@ -44,6 +50,8 @@ public class NewsController {
 	@Autowired
 	private HostHolder hostHolder;
 	
+	@Autowired
+	private CommentService commentService;
 	/**
 	 * 上传图片到云服务器
 	 * @param file
@@ -127,6 +135,17 @@ public class NewsController {
 		News news=  newsService.selectByNewId(newId);
 		if(news!=null){
 			//加载评论
+			List<Comment> comments = commentService.getCommentsByEntity(newId, EntityType.ENTITY_NEWS);
+			
+			List<ViewObject> commentVos = new ArrayList<>();
+			
+			for(Comment comment :comments){
+				ViewObject vo = new ViewObject();
+				vo.set("comment", comment);
+				vo.set("user", userService.getUser(comment.getUserId()));
+				commentVos.add(vo);
+			}
+			model.addAttribute("comments", commentVos);
 		}
 		
 		
