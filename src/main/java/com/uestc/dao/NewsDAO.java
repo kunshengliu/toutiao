@@ -28,5 +28,6 @@ public interface NewsDAO {
 	List<News> selectByUserIdAndOffset(@Param("userId")int userId,@Param("offset") int offset,
 			                            @Param("limit") int limit);
 	
-	
+	@Update({"UPDATE ",TABLE_NAME," SET comment_count=#{count} WHERE id=#{newsId}"})
+	int updateCommentCount(int newsId ,int count);
 }

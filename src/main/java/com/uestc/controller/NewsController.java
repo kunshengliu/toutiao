@@ -147,11 +147,37 @@ public class NewsController {
 			}
 			model.addAttribute("comments", commentVos);
 		}
-		
-		
 		model.addAttribute("news",news);
 		model.addAttribute("owner",userService.getUser(news.getUserId()));
 		return "detail";
+	}
+	/**
+	 * 添加评论,并对评论数量进行更新
+	 * @param newsId
+	 * @param content
+	 * @return
+	 */
+	public String addComment(@RequestParam("newId") int newsId,
+			@RequestParam("content") String content){
+		try{
+			Comment comment = new Comment();
+			comment.setUserId(hostHolder.getUser().getId());
+			comment.setContent(content);
+			comment.setEntityId(newsId);
+			comment.setEntityType(EntityType.ENTITY_NEWS);
+			comment.setCreatedDate(new Date());
+			comment.setStatus(0);
+			commentService.addComment(comment);
+			//更新数量，可以使用异步实现
+			int count = commentService.getCommentCount(newsId,EntityType.ENTITY_NEWS);//评论的数量
+            newsService.updateCommentCount(comment.getEntityId(), count);
+
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return "redirect:/news/" + String.valueOf(newsId);
 	}
 	
 	
