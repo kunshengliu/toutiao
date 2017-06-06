@@ -6,6 +6,10 @@ public class Message {
 	private int id;
 	private int fromId;//发起者Id
 	private int toId;//给谁发送信息
+	private String content;//内容
+	private Date createdDate;//创建日期
+	private int hasRead;//是不是已经读了
+	private String conversationId;//会话
 	public int getId() {
 		return id;
 	}
@@ -48,9 +52,4 @@ public class Message {
 	public void setConversationId(String conversationId) {
 		this.conversationId = conversationId;
 	}
-	private String content;//内容
-	private Date createdDate;//创建日期
-	private int hasRead;//是不是已经读了
-	private String conversationId;//会话
-	
 }

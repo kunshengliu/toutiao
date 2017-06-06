@@ -29,5 +29,5 @@ public interface NewsDAO {
 			                            @Param("limit") int limit);
 	
 	@Update({"UPDATE ",TABLE_NAME," SET comment_count=#{count} WHERE id=#{newsId}"})
-	int updateCommentCount(int newsId ,int count);
+	int updateCommentCount(@Param("newsId") int newsId ,@Param("count") int count);
 }

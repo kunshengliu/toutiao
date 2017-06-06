@@ -128,10 +128,10 @@ public class NewsController {
 
 		}
 	}
-	
+	//news/2
 	
 	@RequestMapping("/news/{newsId}")
-	public String newsDetail(@PathVariable("newId") int newId,Model model){
+	public String newsDetail(@PathVariable("newsId") int newId,Model model){
 		News news=  newsService.selectByNewId(newId);
 		if(news!=null){
 			//加载评论
@@ -149,6 +149,7 @@ public class NewsController {
 		}
 		model.addAttribute("news",news);
 		model.addAttribute("owner",userService.getUser(news.getUserId()));
+		System.out.println("detail2");
 		return "detail";
 	}
 	/**
@@ -157,7 +158,8 @@ public class NewsController {
 	 * @param content
 	 * @return
 	 */
-	public String addComment(@RequestParam("newId") int newsId,
+	@RequestMapping("/addComment")
+	public String addComment(@RequestParam("newsId") int newsId,
 			@RequestParam("content") String content){
 		try{
 			Comment comment = new Comment();
@@ -168,7 +170,7 @@ public class NewsController {
 			comment.setCreatedDate(new Date());
 			comment.setStatus(0);
 			commentService.addComment(comment);
-			//更新数量，可以使用异步实现
+			//更新数量，可以使用异步实现,异步实现很重要啊!
 			int count = commentService.getCommentCount(newsId,EntityType.ENTITY_NEWS);//评论的数量
             newsService.updateCommentCount(comment.getEntityId(), count);
 
