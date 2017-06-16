@@ -17,6 +17,13 @@ public class MessageController {
 	@Autowired
 	private MessageService messageService;
 	
+	@RequestMapping("/msg/detail")
+	public String conversationDetail(){
+		
+		return null;
+	}
+	
+	
 	@RequestMapping("/msg/addMessage")
 	@ResponseBody
 	public String addMessage(@RequestParam("fromId") int fromId,
@@ -30,6 +37,7 @@ public class MessageController {
 		msg.setToId(toId);
 		msg.setConversationId(fromId < toId ? String.format("%d_%d",fromId,toId):String.format("%d_%d", toId, fromId));
 		//存入
+		messageService.addMessage(msg);
             return ToutiaoUtils.getJSONString(msg.getId());
 		
 	}
