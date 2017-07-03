@@ -21,17 +21,22 @@ public class MessageService {
 		return messageDAO.addMessage(message);
 	}
 	/**
-	 * 根据实验跑
-	 * @param cid
+	 * 根据会话
+	 * @param cid 会话ID
 	 * @param offset
 	 * @param limit
 	 * @return
 	 */
-	public List<Message> getConpversationList(int cid,int offset,int limit){
+	public List<Message> getConversationDetail(String cid,int offset,int limit){
 		return messageDAO.getConversationDetail(cid, offset, limit);
 	}
+	public List<Message> getConversationList(int userId ,int offset,int limit){
+		return messageDAO.getConversationList(userId,offset,limit);
+	}
 	
-	
+	public int getConversationUnreadCount(int userId,String cid){
+		return messageDAO.getConversationUnreadCount(userId, cid);
+	}
 	
 	
 }
