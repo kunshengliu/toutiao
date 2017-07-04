@@ -28,7 +28,7 @@ public class JedisAdapter implements InitializingBean{
 		return pool.getResource();
 	}
 	/**
-	 * 添加 K－V建值对
+	 * 添加 set K－V建值对
 	 * @param key
 	 * @param value
 	 * @return
@@ -36,8 +36,9 @@ public class JedisAdapter implements InitializingBean{
 	public long sadd(String key,String value){
 		Jedis jedis=null;
 		try {
-			jedis=this.getJedis();
-			return jedis.sadd(key, value);
+			jedis=pool.getResource();
+			System.out.println(key+"   "+value);
+			return jedis.sadd(key,value);
 		} catch (Exception e) {
 			logger.error("redis happens something error:"+e.getMessage());
 			return 0L;
@@ -57,7 +58,7 @@ public class JedisAdapter implements InitializingBean{
 	public long srem(String key,String value){
 		Jedis jedis=null;
 		try {
-			jedis=this.getJedis();
+			jedis=pool.getResource();
 			return jedis.srem(key, value);
 		} catch (Exception e) {
 			logger.error("redis happens something error:"+e.getMessage());
@@ -69,6 +70,45 @@ public class JedisAdapter implements InitializingBean{
 		}
 		
 	}
-	
+	/**
+	 * 查看是不是有这个k－v元素
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public boolean sismember(String key,String value){
+		Jedis jedis=null;
+		try {
+			jedis=pool.getResource();
+			return jedis.sismember(key, value);
+		} catch (Exception e) {
+			logger.error("redis happens something error:"+e.getMessage());
+			return false;
+		}finally{
+			if(jedis!=null){
+				jedis.close();
+			}
+		}
+	}
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public long scard(String key){
+		Jedis jedis=null;
+		try {
+			jedis=pool.getResource();
+			return jedis.scard(key);
+		} catch (Exception e) {
+			logger.error("redis happens something error:"+e.getMessage());
+			return 0L;
+		}finally{
+			if(jedis!=null){
+				jedis.close();
+			}
+		}
+	}
 	
 }
