@@ -68,8 +68,8 @@ public class NewsService {
 	 * @param newId
 	 * @return
 	 */
-	public News selectByNewId(int newId){
-		return newsDAO.selectByNewsId(newId);
+	public News selectByNewsId(int newsId){
+		return newsDAO.selectByNewsId(newsId);
 	}
 	
 	public int updateCommentCount(int newsId,int count){

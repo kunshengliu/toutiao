@@ -132,7 +132,7 @@ public class NewsController {
 	
 	@RequestMapping("/news/{newsId}")
 	public String newsDetail(@PathVariable("newsId") int newId,Model model){
-		News news=  newsService.selectByNewId(newId);
+		News news=  newsService.selectByNewsId(newId);
 		if(news!=null){
 			//加载评论
 			List<Comment> comments = commentService.getCommentsByEntity(newId, EntityType.ENTITY_NEWS);
