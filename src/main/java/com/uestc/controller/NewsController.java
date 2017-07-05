@@ -35,6 +35,7 @@ import com.uestc.service.CommentService;
 import com.uestc.service.NewsService;
 import com.uestc.service.QiniuService;
 import com.uestc.service.UserService;
+import com.uestc.util.SimpleExecutors;
 import com.uestc.util.ToutiaoUtils;
 
 @Controller
@@ -59,6 +60,10 @@ public class NewsController {
 	
 	@Autowired
 	private EventProducer eventProducer;
+	
+	
+	@Autowired
+	private SimpleExecutors simpleExecutors;
 	
 	/**
 	 * 上传图片到云服务器
@@ -181,17 +186,22 @@ public class NewsController {
 			News news = newsService.selectByNewsId(newsId);
 			//更新数量，可以使用异步实现,异步实现很重要啊!
 			// 现在进行异步化
-			eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(hostHolder.getUser().getId())
-					.setEntityId(newsId)
-					.setEntityType(EntityType.ENTITY_COMENT)
-					.setEntityOwnerId(news.getUserId()));
 			
-			int count = commentService.getCommentCount(newsId,EntityType.ENTITY_NEWS);//评论的数量
-            newsService.updateCommentCount(comment.getEntityId(), count);
-            
-            
-
+			//使用线程池进行异步
+			simpleExecutors.getExecutor().execute(new Runnable() {
+				@Override
+				public void run() {
+					eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(hostHolder.getUser().getId())
+							.setEntityId(newsId)
+							.setEntityType(EntityType.ENTITY_COMENT)
+							.setEntityOwnerId(news.getUserId()));
+					int count = commentService.getCommentCount(newsId,EntityType.ENTITY_NEWS);//评论的数量
+		            newsService.updateCommentCount(comment.getEntityId(), count);	
+				}
+			});
 			
+			
+		
 		}catch(Exception e){
 			e.printStackTrace();
 		}
