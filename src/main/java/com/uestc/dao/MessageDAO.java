@@ -25,7 +25,7 @@ public interface MessageDAO {
      * @return
      */
     @Insert({"INSERT INTO ",TABLE_NAME, " (",INSERT_FIELDS,") "
-    		+ "VALUES ( #{fromId},#{toId},#{content},#{createdDate},#{hasRead},#{conversationID})" })
+    		+ "VALUES ( #{fromId},#{toId},#{content},#{createdDate},#{hasRead},#{conversationId})" })
     int addMessage(Message message);
 	
     /**

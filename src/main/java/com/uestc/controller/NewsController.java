@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.uestc.async.EventModel;
+import com.uestc.async.EventProducer;
+import com.uestc.async.EventType;
 import com.uestc.model.Comment;
 import com.uestc.model.EntityType;
 import com.uestc.model.HostHolder;
@@ -52,6 +55,11 @@ public class NewsController {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	
+	@Autowired
+	private EventProducer eventProducer;
+	
 	/**
 	 * 上传图片到云服务器
 	 * @param file
@@ -170,9 +178,18 @@ public class NewsController {
 			comment.setCreatedDate(new Date());
 			comment.setStatus(0);
 			commentService.addComment(comment);
+			News news = newsService.selectByNewsId(newsId);
 			//更新数量，可以使用异步实现,异步实现很重要啊!
+			// 现在进行异步化
+			eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(hostHolder.getUser().getId())
+					.setEntityId(newsId)
+					.setEntityType(EntityType.ENTITY_COMENT)
+					.setEntityOwnerId(news.getUserId()));
+			
 			int count = commentService.getCommentCount(newsId,EntityType.ENTITY_NEWS);//评论的数量
             newsService.updateCommentCount(comment.getEntityId(), count);
+            
+            
 
 			
 		}catch(Exception e){

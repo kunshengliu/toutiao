@@ -15,30 +15,27 @@ import com.uestc.model.User;
 import com.uestc.service.MessageService;
 import com.uestc.service.UserService;
 @Component
-public class LikeHandler implements EventHandler{
+public class CommentHandler implements EventHandler {
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private MessageService messageService;
 	
-	@Autowired
-	private UserService userService;
-	
 	@Override
 	public void doHandle(EventModel model) {
-		System.out.println("liked");
+		System.out.println("处理评论");
 		Message message = new Message();
-		User user  =userService.getUser(model.getActorId());//这是发信息的用户
 		message.setFromId(model.getActorId());
-		message.setCreatedDate(new Date());
 		message.setToId(model.getEntityOwnerId());
-		message.setContent("用户"+user.getName()
-		+"赞了你的新闻咨询，http://localhost:8080/news/"
-		+String.valueOf(model.getEntityId()));
-		//message.setConversationId();
+		message.setCreatedDate(new Date());
+		User user = userService.getUser(message.getFromId());
+		message.setContent("用户"+user.getName()+"评论了你分享的新闻");
 		messageService.addMessage(message);
 	}
 
 	@Override
 	public List<EventType> getSuppeortEventTypes() {
-		return Arrays.asList(EventType.LIKE);
+		return Arrays.asList(EventType.COMMENT);
 	}
+
 }

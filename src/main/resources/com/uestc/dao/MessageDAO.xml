@@ -5,7 +5,7 @@
     <sql id="table">message</sql>
     <sql id="selectFields">id,from_id,to_id,content,created_date,has_read,conversation_id
     </sql>
-    <select id="getConversationListList" resultType="com.uestc.model.Message">
+    <select id="getConversationList" resultType="com.uestc.model.Message">
         SELECT
         <include refid="selectFields"/>,count(id) as id
         FROM(

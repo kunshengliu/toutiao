@@ -18,6 +18,7 @@ public class EventModel {
 	public EventModel(){}
 	
 	public EventModel(EventType type){
+	//	System.out.println(type);
 		this.type=type;
 	}
 	

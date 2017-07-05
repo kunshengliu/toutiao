@@ -43,6 +43,7 @@ public class EventConsumer implements InitializingBean,ApplicationContextAware{
 				List<EventType> eventTypes= entry.getValue().getSuppeortEventTypes();
 				for(EventType type:eventTypes){
 					if(!config.containsKey(type)){
+						//System.out.println(+type.getValue());
 						config.put(type, new ArrayList<EventHandler>());
 					}
 					config.get(type).add(entry.getValue());
@@ -60,6 +61,7 @@ public class EventConsumer implements InitializingBean,ApplicationContextAware{
 						if(message.equals(key)){
 							continue;
 						}
+						System.out.println("message"+message);
 						EventModel eventModel = JSON.parseObject(message,EventModel.class);
 						if(!config.containsKey(eventModel.getType())){
 							logger.error("error,不存在这个类型的东西啊");

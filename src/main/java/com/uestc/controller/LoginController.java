@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.uestc.async.EventModel;
+import com.uestc.async.EventProducer;
+import com.uestc.async.EventType;
 import com.uestc.service.UserService;
 import com.uestc.util.ToutiaoUtils;
 @Controller
@@ -23,6 +26,11 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private EventProducer eventProducer;
+	
+	
 	@RequestMapping("/reg/")
 	@ResponseBody
 	public String register(Model model,@RequestParam("username") String username,
@@ -38,6 +46,7 @@ public class LoginController {
 					cookie.setMaxAge(3600*24);
 				}
 				response.addCookie(cookie);
+				
 				return ToutiaoUtils.getJSONString(0,"注册成功");
 			}else{
 				return ToutiaoUtils.getJSONString(1, "注册失败");
@@ -67,7 +76,12 @@ public class LoginController {
 				if(remberme>0){
 					cookie.setMaxAge(3600*24); //设置cookie的有效时间。
 				}
-				response.addCookie(cookie);				
+				response.addCookie(cookie);
+				//异常
+//				eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int)map.get("userId"))
+//						.setExt("username", username)
+//						.setExt("email","1232113@qq.com"));
+				
 				return ToutiaoUtils.getJSONString(0,"登录成功");
 			}else{
 				return ToutiaoUtils.getJSONString(1, "登录失败");
