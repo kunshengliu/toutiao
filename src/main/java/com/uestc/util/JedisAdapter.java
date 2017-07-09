@@ -1,6 +1,8 @@
 package com.uestc.util;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +10,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.uestc.model.NewsScore;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Tuple;
 
 /**
  * jedis的
@@ -32,7 +37,7 @@ public class JedisAdapter implements InitializingBean{
 		return pool.getResource();
 	}
 	/**
-	 * 添加 set K－V建值对
+	 * 添加 set 集合的元素
 	 * @param key
 	 * @param value
 	 * @return
@@ -54,7 +59,7 @@ public class JedisAdapter implements InitializingBean{
 		
 	}
 	/**
-	 * 移除
+	 * 移除set里面的元素
 	 * @param key
 	 * @param value
 	 * @return
@@ -75,9 +80,9 @@ public class JedisAdapter implements InitializingBean{
 		
 	}
 	/**
-	 * 查看是不是有这个k－v元素
-	 * @param key
-	 * @param value
+	 * 查看set集合里面是不是有这个元素
+	 * @param key 集合名字
+	 * @param value userId
 	 * @return
 	 */
 	public boolean sismember(String key,String value){
@@ -173,7 +178,12 @@ public class JedisAdapter implements InitializingBean{
 			}
 		}
 	}
-	
+	/**
+	 * 阻塞的取出来
+	 * @param timeout 我们默认设置为0
+	 * @param key
+	 * @return
+	 */
 	public List<String> brpop(int timeout,String key){
 		Jedis jedis = null;
 		try {
@@ -188,6 +198,87 @@ public class JedisAdapter implements InitializingBean{
 			}
 		}
 	}
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 */
+   public void zincrby(String key,String value){
+	   Jedis jedis =null;
+	   try{
+		   jedis =pool.getResource();
+		   jedis.zincrby(key, 1, value);
+	   }catch(Exception e){
+		   logger.error("redis 发生异常");
+	   }finally {
+		if(jedis!=null){
+			jedis.close();
+		}
+	}
+   }
+   /**
+    * 取出zset里面所有元素
+    * @param key
+    * @return
+    */
+   public Set<Tuple> zrange (String key){
+	   Jedis jedis =null;
+	   try {
+		jedis = pool.getResource();
+		//jedis.zrangeWithScores(key, start, end)
+	   Set<Tuple> result=jedis.zrangeWithScores(key, 0, -1);
+	   return result;
+	} catch (Exception e) {
+		logger.error("redis 发生异常"+e.getMessage());
+		return null;
+	}finally {
+		if(jedis!=null){
+			jedis.close();
+		}
+	 }
+   }
+   public double zscore(String key ,String member){
+	   Jedis jedis=null;
+	   try {
+		jedis =pool.getResource();
+		return jedis.zscore(key, member);
+	} catch (Exception e) {
+		logger.error("redis error"+e.getMessage());
+		return 0;
+	}finally {
+		if(jedis!=null){
+			jedis.close();
+		 }
+	 }
+	}
+   
+   public void zadd(String key,String member,double score){
+	   Jedis jedis =null;
+	   try {
+		jedis = pool.getResource();
+		//jedis.z
+	} catch (Exception e) {
+		// TODO: handle exception
+	 }
+   }
+   
+   public void batchUpdateScore(String key , Map<String,Double> map){
+	   Jedis jedis =null;
+	   try {
+		   jedis=pool.getResource();
+		   jedis.zadd(key, map);
+		   
+	} catch (Exception e) {
+		logger.error("redis exception");
+	}finally {
+		if(jedis!=null){
+			jedis.close();
+		}
+	}
+	   
+	   
+	   
+   }
 	
 	
 }

@@ -32,6 +32,7 @@ import com.uestc.model.News;
 import com.uestc.model.User;
 import com.uestc.model.ViewObject;
 import com.uestc.service.CommentService;
+import com.uestc.service.NewsScoreService;
 import com.uestc.service.NewsService;
 import com.uestc.service.QiniuService;
 import com.uestc.service.UserService;
@@ -64,6 +65,9 @@ public class NewsController {
 	
 	@Autowired
 	private SimpleExecutors simpleExecutors;
+	
+	@Autowired
+	private NewsScoreService newsScoreService;
 	
 	/**
 	 * 上传图片到云服务器
@@ -122,7 +126,9 @@ public class NewsController {
 		news.setImage(image);
 		news.setLink(link);
 		news.setCreatedDate(new Date());
+		news.setDate(new Date());
 		news.setTitle(title);
+		news.setScore(0);
 		User user = hostHolder.getUser();
 		if(user!=null){
 			//登陆用户
@@ -190,7 +196,8 @@ public class NewsController {
 			//使用线程池进行异步
 			simpleExecutors.getExecutor().execute(new Runnable() {
 				@Override
-				public void run() {
+				public void run() {	
+					newsScoreService.updateNewsScore(newsId);
 					eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(hostHolder.getUser().getId())
 							.setEntityId(newsId)
 							.setEntityType(EntityType.ENTITY_COMENT)
@@ -198,10 +205,7 @@ public class NewsController {
 					int count = commentService.getCommentCount(newsId,EntityType.ENTITY_NEWS);//评论的数量
 		            newsService.updateCommentCount(comment.getEntityId(), count);	
 				}
-			});
-			
-			
-		
+			});	
 		}catch(Exception e){
 			e.printStackTrace();
 		}

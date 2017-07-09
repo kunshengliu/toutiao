@@ -28,14 +28,20 @@ public class LikeService {
 		}
 		return 0;
 	}
-	
+	/**
+	 * 有人点赞
+	 * @param userId
+	 * @param entityType 实体是news
+	 * @param entityId  newsId；
+	 * @return
+	 */
 	public long like(int userId,int entityType,int entityId){
 		String likeKey = RedisKeyUtil.getLikeKey(entityId, entityType);
 		jedisAdapter.sadd(likeKey, String.valueOf(userId));
 		
 		String disLikeKey =RedisKeyUtil.getDislikeKey(entityId, entityType);
 		jedisAdapter.srem(disLikeKey, userId+"");
-		return jedisAdapter.scard(likeKey);
+		return jedisAdapter.scard(likeKey);//返回点赞数量
 	}
 	
 	public long disLike(int userId,int entityType,int entityId){

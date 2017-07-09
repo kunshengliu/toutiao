@@ -11,6 +11,8 @@ public class News {
 	private int likeCount;
 	private int commentCount;
 	private Date createdDate;
+	private Date date;
+	private int score;
 	public int getId() {
 		return id;
 	}
@@ -59,7 +61,16 @@ public class News {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-
-	
-	
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
 }

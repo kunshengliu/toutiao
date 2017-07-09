@@ -61,7 +61,12 @@ public class MessageController {
 		}
 		return "letter";
 	}	
-	
+	/**
+	 * 消息中心
+	 * @param model
+	 * @param cid
+	 * @return
+	 */
 	@RequestMapping("/msg/detail")
 	public String conversationDetail(Model model,@RequestParam("conversationId") String cid){
 		try {
@@ -87,7 +92,6 @@ public class MessageController {
 		return "letterDetail";
 	}
 	
-	
 	@RequestMapping("/msg/addMessage")
 	@ResponseBody
 	public String addMessage(@RequestParam("fromId") int fromId,
@@ -106,7 +110,6 @@ public class MessageController {
 		}catch(Exception e){
 			return ToutiaoUtils.getJSONString(1, "插入评论失败");
 		}
-		
             return ToutiaoUtils.getJSONString(msg.getId());
 		
 	}

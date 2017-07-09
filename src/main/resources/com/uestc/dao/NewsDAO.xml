@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.uestc.dao.NewsDAO">
     <sql id="table">news</sql>
-    <sql id="selectFields">id,title, link, image, like_count, comment_count,created_date,user_id
+    <sql id="selectFields">id,title, link, image, like_count, comment_count,created_date,date,user_id
     </sql>
     <select id="selectByUserIdAndOffset" resultType="com.uestc.model.News">
         SELECT
@@ -13,7 +13,29 @@
         <if test="userId != 0">
             WHERE user_id = #{userId}
         </if>
-        ORDER BY id DESC
+        ORDER BY date DESC,score DESC
         LIMIT #{offset},#{limit}
     </select>
+    <update id="updateScoreBatch"  parameterType="java.util.List">
+	 
+	      <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				update 
+			    <include refid="table"/>
+				<set>
+				  score=${item.score}
+				</set>
+				where id = ${item.newsId}
+		 </foreach>
+		 
+    </update>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </mapper>

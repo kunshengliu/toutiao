@@ -10,11 +10,12 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.uestc.model.News;
+import com.uestc.model.NewsScore;
 import com.uestc.model.User;
 @Mapper
 public interface NewsDAO {
 	String TABLE_NAME="news";
-	String INSERT_FIELDS="title,link,image,like_count,comment_count,created_date,user_id";
+	String INSERT_FIELDS="title,link,image,like_count,comment_count,created_date,date,user_id,score";
 	String SELECT_FIELDS="id,"+INSERT_FIELDS;
 	
 	@Select({"select",SELECT_FIELDS," from ",TABLE_NAME," where id=#{id}"})
@@ -22,7 +23,7 @@ public interface NewsDAO {
 	
 	
 	@Insert({"insert into",TABLE_NAME,"(",INSERT_FIELDS,
-		") values (#{title},#{link},#{image},#{likeCount},#{commentCount},#{createdDate},#{userId})"})
+		") values (#{title},#{link},#{image},#{likeCount},#{commentCount},#{createdDate},#{date},#{userId},#{score})"})
 	int addNews(News news);
 	
 	List<News> selectByUserIdAndOffset(@Param("userId")int userId,@Param("offset") int offset,
@@ -34,6 +35,6 @@ public interface NewsDAO {
 	@Update({"UPDATE ",TABLE_NAME," SET like_count=#{count} WHERE id=#{newsId}"})
 	int updateLikeCount(@Param("newsId") int newsId,@Param("count") int count);
 	
-	
+	int updateScoreBatch(List<NewsScore> list);
 	
 }

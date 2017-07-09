@@ -28,6 +28,7 @@ public class EventProducer {
 		try {
 			String json =JSONObject.toJSONString(model);
 			String key = RedisKeyUtil.getEventQueueKey();
+			System.out.println("fireEvent:"+key+"  "+json);
 			jedisAdapter.lpush(key, json);
 			return true;
 		} catch (Exception e) {
